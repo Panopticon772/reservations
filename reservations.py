@@ -4,11 +4,17 @@
 
 # import random module
 import random
+# import system module
+import sys
 
 main_menu_options = [
-    'Hello, welcome to (R)eserver! Please choose from the following options: ',
+    'Hello, welcome to Reserver! Please choose from the following options: ',
     'Make a reservation',
     'Exit'
+]
+
+waitlist_menu_options = [
+
 ]
 
 
@@ -18,7 +24,7 @@ def display_main_menu_options():
     print(main_menu_options[2])
 
 
-def calculate_seats(party):
+def calculate_seats():
     # randomize the total amount of seats in the restaurant
     total_seats = random.randint(10, 25)
     print(f'number of seats in r: {total_seats}')
@@ -31,12 +37,12 @@ def calculate_seats(party):
     available_seats = total_seats - occupied_seats
     print(f'available seats: {available_seats}')
 
-    if party <= available_seats and available_seats > 0:
-        print(f'Thank you for your reservation for a party of {party}.')
-        main_menu = False
-    else:
-        print(
-            f'We are not able to create a reservation for your party of {party}. There are only{available_seats} available seats. Would you like to be put on the waitlist?')
+    return available_seats
+
+
+def exit_message():
+    print('Thank you for using Reserver! Have a wonderful day!')
+    sys.exit()
 
 
 # display the main menu
@@ -53,10 +59,32 @@ while main_menu == True:
     if main_menu_choice.lower() == 'r' or main_menu_choice.lower() == 'reservation' or main_menu_choice.lower() == 'make a reservation':
         # ask for party size
         party_size = int(input('What is the size of your party?: '))
-        calculate_seats(party_size)
+        # calculate total, occupied, and available seats
+        available_seats = calculate_seats()
+        # reservation success
+        if party_size <= available_seats and available_seats > 0:
+            print(
+                f'Thank you for your reservation for a party of {party_size}.')
+            exit_message()
+        # reservation failure
+        else:
+            print(
+                f'We are not able to create a reservation for your party of {party_size}. There are only {available_seats} available seats. Would you like to be put on the waitlist?')
+        # wait list - yes or no
+        waitlist_choice = input('Please select yes or no: ')
+        # if yes to waitlist, bring up waitlist menu and calculate time till reservation available
+        if waitlist_choice.lower() == 'yes' or waitlist_choice.lower() == 'y':
+            main_menu = False
+        # otherwise, exit system
+        else:
+            exit_message()
+    # if user inputs exit
     elif main_menu_choice.lower() == 'exit':
-        main_menu = False
-        print('Thank you for visting (R)eserver! Have a wonderful day!')
+        exit_message()
+    # if user inputs any other option
     else:
         print('That is not a valid command. Please try again.')
         display_main_menu_options()
+
+# initialize waitlist
+waitlist_menu = True
