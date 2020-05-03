@@ -12,9 +12,9 @@ import sys
 def main():
 
     main_menu_options = [
-        'Hello, welcome to MyTable! Please choose from the following options: ',
-        'Make a reservation',
-        'Exit'
+        'Hello, welcome to MyTable!',
+        '1) Make a reservation',
+        '2) Exit'
     ]
 
     def display_main_menu_options():
@@ -40,11 +40,9 @@ def main():
         print(f'available seats: {available}')
         return available
 
-    def reservation_size():
-        # get user main menu input
-        main_menu_choice = input()
+    def make_reservation(choice):
         # if user chooses reservation, ask for party size
-        if main_menu_choice.lower() == 'r' or main_menu_choice.lower() == 'reservation':
+        if choice.lower() == '1' or choice.lower() == 'r' or choice() == 'reservation':
             size = int(input('Please enter the size of your party: '))
             return size
         # any other choice, exit system
@@ -52,14 +50,41 @@ def main():
             print('Thank you for using MyTable! Have a wonderful day!')
             sys.exit()
 
+    def calculate_seats(size, available):
+        # if size of party is less than available seats and available seats > 0, party is reserved, else ask for waitlist
+        if size < available and available > 0:
+            print(
+                'Your seats have been reserved. Thank you for reserving with MyTable! Have a wonderful day!')
+            sys.exit()
+        else:
+            print(
+                f"We're sorry, but due to your party size of: {size}, your reservations were not able to be made. Would you like to be put on the waitlist?")
+            return
+
     # display the main menu
     display_main_menu_options()
 
+    # get the users input
+    choice = input('Please select an option: ')
+
+    # users decision
+    size = make_reservation(choice)
+
+    # total seats
     total = total_seats()
+
+    # occupied
     occupied = occupied_seats(total)
+
+    # available
     available = available_seats(total, occupied)
 
-    reservation_size()
+    # calculate
+    calculate_seats(size, available)
+
+    # waitlist
+
+    # status check
 
 
 main()
